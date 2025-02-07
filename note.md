@@ -121,11 +121,12 @@ the EVM[^1] can read and write to several places
 
 ## Libraries
 new fearture 
-```js
+```solidity
 SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
 import {AggregatorV3Interface} from "@candidate/chainlink-brownie-course/contracts/interfaces/AggregatorV3Interface.ali";
+
 library PriceConverter  {
 
   function getPrice() internal view returns (uint256) {
@@ -139,9 +140,52 @@ library PriceConverter  {
   uint25  ethAmountInUSD  =  (ethPrice * ethAmount ) / 1e18;
   return ethAmountInUSD;
   }
-
-  
-
 }
+```
+
+## Encrypting private key in anvil using cast
+
+```bash
+# ERC-2335: BLS12-381 KeyStore
+# method 1 remember the password
+# step 1
+cast wallet impoort defaultkey --interactive
+# step 2
+forge script script/<file_name>.s.sol --rpc-url <rpc_url>:<port> --account defaultkey --sender <address_from_step_1> --broadcast -vvvv 
+
+# method 2
+cast wallet 
+```
+
+## Deploying contract using cmd/cast
+
+## Interacting with contract using cmd/cast
+
+```bash
+# Send
+cast send <contract_address> "<method_name/signature>" <args> --rpc-url <rpc_url>:<port> --private-key <private_key> 
+cast send <contract_address> "store(uint256)" 123
+# Call
+cast call <contract_address> "<method_name/signature>" <args> --rpc-url <rpc_url>:<port> --private-key <private_key>
+cast call <contract_address> "retrieve()" 
+# convert to  decimal
+cast call <contract_address> "retrieve()" --convert-to-dec
+cast --to-base <hex_value> dec
+
+```
+## installing Dependencies
+
+```bash
+#https://github.com/smartcontractkit/chainlink-brownie-contracts
+forge install smartcontractkit/chainlink-brownie-contracts@1.2 --no-commit
+#add remapping in foundry.toml 
+remappings = ["@chainlink/contracts/=lib/chainlink-brownie-contracts/contracts/"]
+```
+
+## forge gass optimization
+
+```bash
+forge --snapshot --gas-report 
+forge --snapshot -m <method_name>  
 ```
 [^1] : Ethereum Virtual Machine
